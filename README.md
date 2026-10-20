@@ -4,7 +4,7 @@
 
 ### Teaching Agents to Predict Failure and Stop Early
 
-Jiarong Liang<sup>✉</sup> · Xueguang Ma · Dongfu Jiang · Yuxuan Zhang · Ping Nie · Wenhu Chen
+[Jiarong Liang](https://dream233.github.io/)<sup>✉</sup> · Xueguang Ma · Dongfu Jiang · Yuxuan Zhang · Ping Nie · [Wenhu Chen](https://wenhuchen.github.io/)
 
 University of Waterloo
 
