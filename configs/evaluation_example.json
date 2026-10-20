@@ -1,0 +1,52 @@
+{
+  "_comment": "Evaluation spec of the paper's stopping cohort. Paths are relative to this file; point them at your own run records, score files and judge packages. Use a second copy with the ranking-cohort run lists (and the extras below) for tier AUC, Table 2 and Figure 3.",
+  "prices": "prices_20260918.json",
+  "pricing": "list",
+  "gpu_usd_per_hour": 0.8,
+  "rates": [0.02, 0.05, 0.1],
+  "bootstrap": {"draws": 2000, "seed": 0, "cluster": "repo"},
+  "primary": "qwen2.5-7b-instruct",
+  "groups": {
+    "qwen2.5-7b-instruct": ["qwen2.5-7b-instruct_s0", "qwen2.5-7b-instruct_s1", "qwen2.5-7b-instruct_s2", "qwen2.5-7b-instruct_s3", "qwen2.5-7b-instruct_s4"],
+    "qwen3-8b": ["qwen3-8b_s0", "qwen3-8b_s1", "qwen3-8b_s2", "qwen3-8b_s3"],
+    "qwen2.5-coder-7b-instruct": ["qwen2.5-coder-7b-instruct_s0", "qwen2.5-coder-7b-instruct_s1", "qwen2.5-coder-7b-instruct_s2", "qwen2.5-coder-7b-instruct_s3"]
+  },
+  "monitors": {
+    "qwen2.5-7b-instruct_s0": {"scores": "../data/scores/qwen2.5-7b-instruct_s0.jsonl"},
+    "qwen2.5-7b-instruct_s1": {"scores": "../data/scores/qwen2.5-7b-instruct_s1.jsonl"},
+    "qwen2.5-7b-instruct_s2": {"scores": "../data/scores/qwen2.5-7b-instruct_s2.jsonl"},
+    "qwen2.5-7b-instruct_s3": {"scores": "../data/scores/qwen2.5-7b-instruct_s3.jsonl"},
+    "qwen2.5-7b-instruct_s4": {"scores": "../data/scores/qwen2.5-7b-instruct_s4.jsonl"},
+    "qwen3-8b_s0": {"scores": "../data/scores/qwen3-8b_s0.jsonl"},
+    "qwen3-8b_s1": {"scores": "../data/scores/qwen3-8b_s1.jsonl"},
+    "qwen3-8b_s2": {"scores": "../data/scores/qwen3-8b_s2.jsonl"},
+    "qwen3-8b_s3": {"scores": "../data/scores/qwen3-8b_s3.jsonl"},
+    "qwen2.5-coder-7b-instruct_s0": {"scores": "../data/scores/qwen2.5-coder-7b-instruct_s0.jsonl"},
+    "qwen2.5-coder-7b-instruct_s1": {"scores": "../data/scores/qwen2.5-coder-7b-instruct_s1.jsonl"},
+    "qwen2.5-coder-7b-instruct_s2": {"scores": "../data/scores/qwen2.5-coder-7b-instruct_s2.jsonl"},
+    "qwen2.5-coder-7b-instruct_s3": {"scores": "../data/scores/qwen2.5-coder-7b-instruct_s3.jsonl"},
+    "qwen2.5-7b-instruct_base": {"scores": "../data/scores/qwen2.5-7b-instruct_base.jsonl"},
+    "qwen3-8b_base": {"scores": "../data/scores/qwen3-8b_base.jsonl"},
+    "qwen2.5-coder-7b-instruct_base": {"scores": "../data/scores/qwen2.5-coder-7b-instruct_base.jsonl"}
+  },
+  "judge_configs": "judges.json",
+  "judges": {
+    "sol": {"packages": ["../data/judges/sol"]},
+    "terra": {"packages": ["../data/judges/terra"]},
+    "luna": {"packages": ["../data/judges/luna"]},
+    "opus5": {"packages": ["../data/judges/opus5"]},
+    "opus46": {"packages": ["../data/judges/opus46"]},
+    "sonnet46": {"packages": ["../data/judges/sonnet46"]}
+  },
+  "calibration": {
+    "gpt": "../data/runs/calibration_gpt.jsonl",
+    "claude": "../data/runs/calibration_claude.jsonl"
+  },
+  "cells": {
+    "verified/luna": {"runs": "../data/runs/stopping_verified_luna.jsonl", "calibration": "gpt", "judges": ["sol", "terra", "luna"]},
+    "verified/sonnet": {"runs": "../data/runs/stopping_verified_sonnet.jsonl", "calibration": "claude", "judges": ["opus5", "opus46", "sonnet46"]},
+    "pro/luna": {"runs": "../data/runs/stopping_pro_luna.jsonl", "calibration": "gpt", "judges": ["sol", "terra", "luna"]},
+    "pro/sonnet": {"runs": "../data/runs/stopping_pro_sonnet.jsonl", "calibration": "claude", "judges": ["opus5", "opus46", "sonnet46"]}
+  },
+  "_ranking_cohort_extras": {"fixed_steps": [5, 8, 11, 14, 17, 20], "fixed_step_methods": ["qwen2.5-7b-instruct_ens", "qwen2.5-7b-instruct_base"], "timing_method": "qwen2.5-7b-instruct_ens", "timing_rate": 0.05}
+}

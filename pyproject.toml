@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stoploss"
+version = "0.1.0"
+description = "StopLoss: learned failure recognition for inexpensive early stopping of coding agents"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+# window building needs only a tokenizer; training (training/) and scoring need the full stack
+model = ["torch>=2.4", "transformers>=4.57", "peft>=0.19", "accelerate>=1.0", "safetensors"]
+collect = ["fastapi>=0.100", "uvicorn>=0.23", "httpx>=0.27"]
+dev = ["pytest>=7", "fastapi>=0.100", "uvicorn>=0.23", "httpx>=0.27"]
+
+[tool.setuptools.packages.find]
+include = ["stoploss*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

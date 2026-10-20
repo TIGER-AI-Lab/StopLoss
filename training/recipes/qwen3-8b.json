@@ -1,0 +1,20 @@
+{
+  "name": "qwen3-8b",
+  "description": "Qwen3-8B backbone (paper App. A); thinking is disabled by the chat template (stoploss.sequence).",
+  "model": "Qwen/Qwen3-8B",
+  "gpus": 2,
+  "batch_size": 2,
+  "grad_accum": 4,
+  "seeds": [0, 1, 2, 3],
+  "max_len": 1600,
+  "epochs": 1.0,
+  "lr": 0.0001,
+  "weight_decay": 0.05,
+  "warmup_ratio": 0.03,
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "gradient_checkpointing": true,
+  "eval_every": 300,
+  "val_trajectories": 150
+}

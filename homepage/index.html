@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StopLoss: Teaching Agents to Predict Failure and Stop Early</title>
+  <meta name="description" content="StopLoss is a small monitor that learns from finished runs when a coding agent is likely to fail and stops the run early, at one to two orders of magnitude lower cost per check than the LLM judges we tested.">
+  <link rel="canonical" href="https://tiger-ai-lab.github.io/StopLoss/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="StopLoss: Teaching Agents to Predict Failure and Stop Early">
+  <meta property="og:description" content="A small monitor that learns from finished runs when a coding agent is likely to fail, and stops it early for a fraction of what an LLM judge costs.">
+  <meta property="og:url" content="https://tiger-ai-lab.github.io/StopLoss/">
+  <meta property="og:image" content="https://tiger-ai-lab.github.io/StopLoss/static/images/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#00897b">
+  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+  <link rel="stylesheet" href="static/css/style.css">
+  <script>
+    try {
+      var saved = localStorage.getItem("stoploss-theme");
+      if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="container nav-inner">
+    <a class="brand" href="#top"><img src="static/images/favicon.svg" alt="" width="26" height="26">StopLoss</a>
+    <div class="nav-links">
+      <a class="optional" href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a class="optional" href="#findings">Findings</a>
+      <a href="#release">Release</a>
+      <a class="optional" href="#citation">BibTeX</a>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5a8.5 8.5 0 1 0 10.9 10.9z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <a class="news" href="#release"><span class="tag">New</span>Code, models and training data released<span class="arrow" aria-hidden="true">→</span></a>
+    <h1><span class="name">StopLoss</span>: Teaching Agents to Predict Failure and Stop Early</h1>
+    <p class="authors">
+      <span>Jiarong Liang</span><wbr><span>Xueguang Ma</span><wbr><span>Dongfu Jiang</span><wbr><span>Yuxuan Zhang</span><wbr><span>Ping Nie</span><wbr><span>Wenhu Chen</span>
+    </p>
+    <p class="affil">University of Waterloo</p>
+    <div class="links">
+      <a class="btn btn-ink" href="https://arxiv.org/pdf/2610.25525">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Paper</a>
+      <a class="btn" href="https://arxiv.org/abs/2610.25525">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5h6a4 4 0 0 1 4 4V20a3 3 0 0 0-3-3H2z"/><path d="M22 4.5h-6a4 4 0 0 0-4 4V20a3 3 0 0 1 3-3h7z"/></svg>arXiv</a>
+      <a class="btn" href="https://github.com/TIGER-AI-Lab/StopLoss">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
+      <a class="btn" href="https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c"><span class="emoji" aria-hidden="true">🤗</span>Models</a>
+      <a class="btn" href="https://huggingface.co/datasets/TIGER-Lab/StopLoss-Training-Data"><span class="emoji" aria-hidden="true">🤗</span>Data</a>
+      <!-- TODO: replace the two links below with the X and LinkedIn announcement posts (also in README.md). -->
+      <a class="btn" href="https://x.com/TODO">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X</a>
+      <a class="btn" href="https://www.linkedin.com/TODO">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.4 7.6a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM3.6 9h3.6v11.5H3.6zM9.4 9h3.5v1.6h.05c.5-.9 1.7-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6v6.2h-3.6v-5.5c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.6H9.4z"/></svg>LinkedIn</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="section tight-top" aria-label="Teaser">
+    <div class="container">
+      <figure class="figure">
+        <a class="zoom" href="static/images/teaser.png" aria-label="Open the full-size figure"><img src="static/images/teaser.png" width="2056" height="945"
+             alt="On SWE-bench Pro with GPT-5.6 Luna, StopLoss (the Qwen2.5-Coder-7B-Instruct ensemble) captures 50.7% of failing runs at about 0.7 times the full-execution cost per retained solve, while the three GPT-5.6 judges capture at most 29% at a cost per retained solve equal to or above full execution; StopLoss spends $0.15 on monitoring versus $2.03 to $15.36 for the judges."></a>
+        <figcaption><b>StopLoss stops more failing runs than LLM judges and spends far less on monitoring.</b>
+          SWE-bench Pro tasks executed by GPT-5.6 Luna; StopLoss is the Qwen2.5-Coder-7B-Instruct ensemble.
+          (a) It stops 35 of the 69 failing runs (50.7%), while no judge stops more than 20.
+          (b) Its monitoring costs $0.15 across all 213 runs, versus $2.03–$15.36 for the judges.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section tight-top" aria-label="Summary">
+    <div class="container">
+      <p class="tldr">StopLoss is a small monitor that learns from finished runs <em>to tell when a coding agent is likely to fail</em>, and stops the run early, at a fraction of what it costs to ask an LLM judge.</p>
+      <div class="stats">
+        <div class="stat"><div class="value">$0.00024</div><div class="label">estimated cost per check of the primary ensemble, one to two orders of magnitude below every LLM judge we tested</div></div>
+        <div class="stat"><div class="value">99%</div><div class="label">of successful runs kept on SWE-bench Verified with GPT-5.6 Luna, while cost per solve drops 4.5%</div></div>
+        <div class="stat"><div class="value">−48%</div><div class="label">cost per retained solve on SWE-bench Pro with Claude Sonnet 4.6 (Qwen3-8B backbone, keeping 83% of successful runs)</div></div>
+        <div class="stat"><div class="value">4 / 4</div><div class="label">settings where all three backbones cost less per retained solve than every judge</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="abstract">
+    <div class="container prose">
+      <div class="eyebrow">Abstract</div>
+      <h2>Can early stopping pay for itself?</h2>
+      <div class="abstract">
+        <p>Coding agents keep working on runs that will fail verification, and asking a frontier model to watch for this is expensive in its own right. We introduce StopLoss, a small external monitor that learns failure recognition from completed trajectories and their verifier outcomes. The name is inspired by the stop-loss order in finance: StopLoss ends a run early when the run is likely to fail, which saves resources. Final outcomes label earlier local windows, so a fine-tuned language model can score the most recent tool steps in a single forward pass, and a threshold calibrated on successful runs turns that score into an abort decision without changing the executor. Trained on GPT-family SWE-rebench trajectories and evaluated on SWE-bench Verified and a SWE-bench Pro subset with GPT and Claude executors, StopLoss is compared against six general-purpose judges reading identical windows. Outcome supervision lifts failure prediction from near chance to a useful signal at the first check, at one to two orders of magnitude lower cost per check than any tested judge. This translates into savings: relative to completing every task, StopLoss lowers cost per retained solve by 4.5% on Verified while preserving 99% of successful runs, and by up to 31% on the costlier Pro subset, reaching 48% with a Qwen3-8B backbone, and in all four settings its cost per retained solve is below that of every judge policy. Outcome-trained small monitors can make failure recognition cheap enough for early stopping to pay for itself.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="method">
+    <div class="container">
+      <div class="eyebrow"><span class="num">01</span>Method</div>
+      <h2>Learn from outcomes, stop at a calibrated threshold</h2>
+      <p class="lede">StopLoss needs only completed runs and their verifier outcomes. It watches a running agent from the outside, reads nothing but the trajectory text, and never changes the agent.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="k"><b>1</b>Label</div>
+          <h3>Outcomes label earlier windows</h3>
+          <p>Every window of a failed run is labelled <span class="label-chip abort">ABORT</span>. In a successful run, windows at the last two tool steps are <span class="label-chip deliver">DELIVER</span> and earlier ones <span class="label-chip continue">CONTINUE</span>. A window is the step count plus the three most recent action–observation pairs.</p>
+        </div>
+        <div class="step">
+          <div class="k"><b>2</b>Train</div>
+          <h3>A small model scores one window</h3>
+          <p>A 7–8B model (Qwen2.5-7B-Instruct, Qwen3-8B or Qwen2.5-Coder-7B-Instruct) is fine-tuned with LoRA. The failure score is the probability of ABORT among the three labels, read from the next-token logits: one forward pass, no generated text.</p>
+        </div>
+        <div class="step">
+          <div class="k"><b>3</b>Stop</div>
+          <h3>Calibrate once, then stop early</h3>
+          <p>A threshold τ is set on successful runs so that at most 5% of them would be stopped, then frozen. At tool steps 5, 8, 11, …, the run stops as soon as the ensemble's average score reaches τ.</p>
+        </div>
+      </div>
+      <figure class="figure">
+        <a class="zoom" href="static/images/workflow.png" aria-label="Open the full-size figure"><img src="static/images/workflow.png" width="2070" height="1075"
+             alt="StopLoss workflow. Offline, final outcomes label earlier windows, 7-8B models are trained with LoRA, and a threshold is calibrated on successful runs and frozen. Online, at tool steps 5, 8, 11, ..., each ensemble member reads the step count and the three most recent action-observation pairs in one forward pass; the run stops once the averaged failure score reaches the threshold, otherwise it continues to the next check."></a>
+        <figcaption><b>StopLoss turns final verifier outcomes into early-stopping decisions.</b>
+          Offline, the outcome of each completed run labels its earlier windows, 7–8B models are adapted with LoRA, and the
+          threshold τ is calibrated on successful runs and frozen. Online, each ensemble member reads the step count and the
+          three most recent action–observation pairs in one forward pass; the run stops once the averaged failure score
+          reaches τ, and the executor itself is unchanged.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section alt" id="results">
+    <div class="container">
+      <div class="eyebrow"><span class="num">02</span>Results</div>
+      <h2>Cheaper per solve than every tested judge, in all four settings</h2>
+      <p class="lede">StopLoss is trained on SWE-rebench runs of GPT-family executors and evaluated on SWE-bench Verified and a three-repository SWE-bench Pro subset, with GPT-5.6 Luna and Claude Sonnet 4.6 as executors. Six LLM judges read the same windows, and every method pays for the checks it makes and for the successful runs it stops. Costs are estimated from frozen list prices for API calls and from GPU time for StopLoss.</p>
+
+      <div class="sub-head">
+        <h3>Change in cost per retained solve</h3>
+        <p>Relative to running every task to completion, monitoring included. Left of zero saves money.</p>
+      </div>
+      <div class="card">
+        <div class="legend" aria-hidden="true">
+          <span class="key"><span class="swatch sl"></span>StopLoss, one bar per backbone</span>
+          <span class="key"><span class="swatch judge"></span>LLM judge</span>
+        </div>
+        <div class="multiples">
+          <div class="panel"><p class="panel-title">SWE-bench Verified <span>· GPT-5.6 Luna</span></p><div class="chart" data-chart="delta" data-setting="vl"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Verified <span>· Claude Sonnet 4.6</span></p><div class="chart" data-chart="delta" data-setting="vs"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Pro <span>· GPT-5.6 Luna</span></p><div class="chart" data-chart="delta" data-setting="pl"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Pro <span>· Claude Sonnet 4.6</span></p><div class="chart" data-chart="delta" data-setting="ps"></div></div>
+        </div>
+        <p class="chart-note">StopLoss bars are seed ensembles of each backbone (5, 4 and 4 seeds). GPT-5.6 judges read GPT-5.6 Luna runs and Claude judges read Claude Sonnet 4.6 runs. Hover or focus a row for its monitoring cost and stopping outcomes.</p>
+      </div>
+
+      <div class="sub-head">
+        <h3>Full results</h3>
+        <p>Table 1 of the paper. Bold marks the best cost and stopping values within a setting.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Benchmark and executor">
+        <button class="tab" role="tab" type="button" data-setting="vl" aria-selected="true">Verified <span class="sub">· Luna</span></button>
+        <button class="tab" role="tab" type="button" data-setting="vs" aria-selected="false">Verified <span class="sub">· Sonnet 4.6</span></button>
+        <button class="tab" role="tab" type="button" data-setting="pl" aria-selected="false">Pro <span class="sub">· Luna</span></button>
+        <button class="tab" role="tab" type="button" data-setting="ps" aria-selected="false">Pro <span class="sub">· Sonnet 4.6</span></button>
+      </div>
+      <p class="table-meta" id="table-meta"></p>
+      <div class="table-wrap" role="tabpanel">
+        <table class="results">
+          <thead>
+            <tr class="groups"><th></th><th colspan="2">Cost</th><th>Prediction</th><th colspan="2">Stopping outcomes</th></tr>
+            <tr class="cols">
+              <th scope="col">Method</th>
+              <th scope="col">ΔCPS (%) <span class="arrow">↓</span></th>
+              <th scope="col">Monitoring ($) <span class="arrow">↓</span></th>
+              <th scope="col">Tier AUC <span class="arrow">↑</span></th>
+              <th scope="col">Success retained (%) <span class="arrow">↑</span></th>
+              <th scope="col">Failure capture (%) <span class="arrow">↑</span></th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+      <div class="defs">
+        <div><b>ΔCPS</b> · change in cost per retained solve versus running every task to completion, monitoring included; negative is a saving.</div>
+        <div><b>Monitoring</b> · estimated total cost of the checks a method makes during the stopping runs.</div>
+        <div><b>Tier AUC</b> · how well failure scores rank eventual failures above successes at similar spend; 0.5 is chance.</div>
+        <div><b>Success retained / failure capture</b> · share of otherwise successful runs kept, and of otherwise failed runs stopped.</div>
+      </div>
+
+      <div class="sub-head">
+        <h3>Training lifts failure prediction</h3>
+        <p>Tier AUC of each untuned backbone and its trained ensemble (Table 2 of the paper).</p>
+      </div>
+      <div class="card">
+        <div class="legend" aria-hidden="true">
+          <span class="key"><span class="dot-key base"></span>Untuned backbone</span>
+          <span class="key"><span class="dot-key trained"></span>Trained StopLoss ensemble</span>
+          <span class="key"><span class="line-key"></span>Step-count baseline</span>
+        </div>
+        <div class="multiples">
+          <div class="panel"><p class="panel-title">SWE-bench Verified <span>· GPT-5.6 Luna</span></p><div class="chart" data-chart="auc" data-setting="vl"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Verified <span>· Claude Sonnet 4.6</span></p><div class="chart" data-chart="auc" data-setting="vs"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Pro <span>· GPT-5.6 Luna</span></p><div class="chart" data-chart="auc" data-setting="pl"></div></div>
+          <div class="panel"><p class="panel-title">SWE-bench Pro <span>· Claude Sonnet 4.6</span></p><div class="chart" data-chart="auc" data-setting="ps"></div></div>
+        </div>
+        <p class="chart-note">0.5 is chance. The step-count baseline scores a window by its tool-step index alone, without reading the trajectory. The right column gives each trained ensemble's gain over its untuned backbone (training plus seed ensembling).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="findings">
+    <div class="container">
+      <div class="eyebrow"><span class="num">03</span>Findings</div>
+      <h2>What makes early stopping pay off</h2>
+      <div class="findings">
+        <div class="finding">
+          <div class="kicker">A signal from the first check</div>
+          <div class="big">0.642 AUC <small>at tool step 5</small></div>
+          <p>The primary Qwen2.5-7B-Instruct ensemble already separates failures from successes at the first check: an ordinary AUC (one observation per run reaching step 5) of 0.642 on Verified/Luna and 0.645 on Pro/Luna, against 0.494 and 0.450 for its untuned base.</p>
+        </div>
+        <div class="finding">
+          <div class="kicker">Ranking well is not enough</div>
+          <div class="big">+34.7% <small>for the best ranker</small></div>
+          <p>On Verified/Sonnet, Claude Opus 5 has the highest tier AUC in the study (0.747), but its checks cost 44.9% of the execution budget while it avoids only 16.0%, so cost per solve rises by a third.</p>
+        </div>
+        <div class="finding">
+          <div class="kicker">The break-even rule</div>
+          <div class="big"><span class="formula">g &gt; m + r</span></div>
+          <p>Stopping lowers cost per solve only when the share of execution cost it avoids (<i>g</i>) exceeds monitoring cost as a share of full execution cost (<i>m</i>) plus the share of successful runs it stops (<i>r</i>). A small monitor keeps <i>m</i> small.</p>
+        </div>
+        <div class="finding">
+          <div class="kicker">Thresholds do not always transfer</div>
+          <div class="big">1.0% vs 27.8% <small>false kills</small></div>
+          <p>On Luna runs, the primary StopLoss ensemble has a similar tier AUC on Verified (0.622) and Pro (0.614), yet its frozen threshold stops 1.0% and 27.8% of successful runs. One plausible contributor: successful Pro runs are longer (median 16 vs 13 tool steps), so they face more checks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="release">
+    <div class="container">
+      <div class="eyebrow"><span class="num">04</span>Release</div>
+      <h2>Models, data and code</h2>
+      <p class="lede">Three trained monitors, the training windows, and code for trajectory collection, window building, training, scoring, the LLM-judge baselines and the evaluation.</p>
+      <div class="release">
+        <a class="rcard" href="https://huggingface.co/TIGER-Lab/StopLoss-Qwen2.5-7B-Instruct">
+          <span class="kind"><span class="emoji" aria-hidden="true">🤗</span>Model · primary</span>
+          <span class="name">StopLoss-Qwen2.5-7B-Instruct</span>
+          <span class="desc">LoRA adapter for Qwen2.5-7B-Instruct</span>
+          <span class="go">View on Hugging Face →</span>
+        </a>
+        <a class="rcard" href="https://huggingface.co/TIGER-Lab/StopLoss-Qwen3-8B">
+          <span class="kind"><span class="emoji" aria-hidden="true">🤗</span>Model</span>
+          <span class="name">StopLoss-Qwen3-8B</span>
+          <span class="desc">LoRA adapter for Qwen3-8B</span>
+          <span class="go">View on Hugging Face →</span>
+        </a>
+        <a class="rcard" href="https://huggingface.co/TIGER-Lab/StopLoss-Qwen2.5-Coder-7B-Instruct">
+          <span class="kind"><span class="emoji" aria-hidden="true">🤗</span>Model</span>
+          <span class="name">StopLoss-Qwen2.5-Coder-7B-Instruct</span>
+          <span class="desc">LoRA adapter for Qwen2.5-Coder-7B-Instruct</span>
+          <span class="go">View on Hugging Face →</span>
+        </a>
+        <a class="rcard" href="https://huggingface.co/datasets/TIGER-Lab/StopLoss-Training-Data">
+          <span class="kind"><span class="emoji" aria-hidden="true">🤗</span>Dataset</span>
+          <span class="name">StopLoss-Training-Data</span>
+          <span class="desc">Training windows from SWE-rebench runs and the checkpoint-selection set</span>
+          <span class="go">View on Hugging Face →</span>
+        </a>
+      </div>
+      <p class="chart-note">Each adapter is seed 0 of its backbone; the main results of the paper use seed ensembles.</p>
+
+      <div class="quickstart">
+        <div>
+          <h3>Score your own runs</h3>
+          <p>Build windows from finished Harbor runs and score them with a released monitor. A run record is one JSON line with <code>task</code>, <code>bench</code>, <code>worker</code>, <code>reward</code> and the path of the run's <code>trajectory.json</code>.</p>
+          <p><a href="https://github.com/TIGER-AI-Lab/StopLoss#getting-started">Training and full reproduction in the README →</a></p>
+        </div>
+        <div class="code">
+          <button class="copy" type="button" data-copy="quickstart-code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button>
+<pre id="quickstart-code"><span class="c"># install</span>
+git clone https://github.com/TIGER-AI-Lab/StopLoss.git &amp;&amp; cd StopLoss
+pip install -e ".[model]"
+
+<span class="c"># windows at the checks k = 5, 8, 11, ...</span>
+python scripts/build_windows.py --runs my_runs.jsonl \
+    --out windows.jsonl --ks checkpoints
+
+<span class="c"># probability of failure for every window</span>
+python scripts/score_windows.py --base Qwen/Qwen2.5-7B-Instruct \
+    --adapter TIGER-Lab/StopLoss-Qwen2.5-7B-Instruct \
+    --windows windows.jsonl --out scores.jsonl</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="citation">
+    <div class="container">
+      <div class="eyebrow"><span class="num">05</span>Citation</div>
+      <h2>BibTeX</h2>
+      <p class="lede">If you find StopLoss useful, please cite our paper.</p>
+      <div class="bib">
+        <button class="copy" type="button" data-copy="bibtex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button>
+        <!-- TODO: replace this placeholder with the Google Scholar BibTeX once the paper is indexed (also in README.md). -->
+<pre id="bibtex">@article{stoploss2026,
+  title   = {StopLoss: Teaching Agents to Predict Failure and Stop Early},
+  author  = {TBD},
+  journal = {arXiv preprint arXiv:2610.25525},
+  year    = {2026}
+}</pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <span>StopLoss · University of Waterloo</span>
+    <nav aria-label="Footer">
+      <a href="https://arxiv.org/abs/2610.25525">Paper</a>
+      <a href="https://github.com/TIGER-AI-Lab/StopLoss">Code</a>
+      <a href="https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c">Hugging Face</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+<script src="static/js/main.js" defer></script>
+</body>
+</html>

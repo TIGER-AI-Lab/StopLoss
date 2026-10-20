@@ -1,0 +1,81 @@
+{
+  "notes": [
+    "The six paid judges of the paper (Sec. 3.2, App. A).",
+    "Same-family protocol: a judge reads only windows whose 'worker' (executor label) is in its 'workers'.",
+    "GPT judges: Responses API, high reasoning effort, no output cap; truncation retried 'length_retries' times.",
+    "Claude judges: Messages API, adaptive thinking, high effort; 'max_tokens_ladder' is climbed on truncation.",
+    "Accepted: normal termination, parsed answer, recorded usage, backend model in 'allowed_backend_models'.",
+    "If the API reports a dated snapshot id for the same model, add it to 'allowed_backend_models' deliberately."
+  ],
+  "judges": [
+    {
+      "judge_id": "sol",
+      "model": "gpt-5.6-sol",
+      "family": "gpt",
+      "api": "responses",
+      "reasoning": {"effort": "high"},
+      "max_tokens": null,
+      "length_retries": 2,
+      "allowed_backend_models": ["gpt-5.6-sol"],
+      "workers": ["luna", "terra"]
+    },
+    {
+      "judge_id": "terra",
+      "model": "gpt-5.6-terra",
+      "family": "gpt",
+      "api": "responses",
+      "reasoning": {"effort": "high"},
+      "max_tokens": null,
+      "length_retries": 2,
+      "allowed_backend_models": ["gpt-5.6-terra"],
+      "workers": ["luna", "terra"]
+    },
+    {
+      "judge_id": "luna",
+      "model": "gpt-5.6-luna",
+      "family": "gpt",
+      "api": "responses",
+      "reasoning": {"effort": "high"},
+      "max_tokens": null,
+      "length_retries": 2,
+      "allowed_backend_models": ["gpt-5.6-luna"],
+      "workers": ["luna", "terra"]
+    },
+    {
+      "judge_id": "opus5",
+      "model": "claude-opus-5",
+      "family": "claude",
+      "api": "messages",
+      "thinking": {"type": "adaptive"},
+      "output_config": {"effort": "high"},
+      "max_tokens": 4000,
+      "max_tokens_ladder": [4000, 8000, 16000],
+      "allowed_backend_models": ["claude-opus-5"],
+      "workers": ["sonnet46t"]
+    },
+    {
+      "judge_id": "opus46",
+      "model": "claude-opus-4-6",
+      "family": "claude",
+      "api": "messages",
+      "thinking": {"type": "adaptive"},
+      "output_config": {"effort": "high"},
+      "max_tokens": 4000,
+      "max_tokens_ladder": [4000, 8000, 16000],
+      "allowed_backend_models": ["claude-opus-4-6"],
+      "workers": ["sonnet46t"]
+    },
+    {
+      "judge_id": "sonnet46",
+      "model": "claude-sonnet-4-6",
+      "family": "claude",
+      "api": "messages",
+      "thinking": {"type": "adaptive"},
+      "output_config": {"effort": "high"},
+      "max_tokens": 4000,
+      "max_tokens_ladder": [4000, 8000, 16000],
+      "allowed_backend_models": ["claude-sonnet-4-6"],
+      "workers": ["sonnet46t"]
+    }
+  ]
+}

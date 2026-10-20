@@ -1,0 +1,23 @@
+{
+  "version": "20260918",
+  "checked": "2026-09-18, official pricing pages",
+  "tier": "Standard tier, short-context columns, no batch / priority discounts; Anthropic cache writes at the 5-minute rate",
+  "sources": {
+    "openai": "https://developers.openai.com/api/docs/pricing",
+    "anthropic": "https://platform.claude.com/docs/en/about-claude/pricing"
+  },
+  "billing_notes": {
+    "reasoning_and_thinking": "reasoning / thinking tokens are part of the output token count and billed at the output price",
+    "openai_cached_input": "OpenAI usage: input_tokens already includes the cached part (cached_tokens is a subset), so uncached = input - cached",
+    "anthropic_cached_input": "Anthropic usage: input_tokens is the uncached part; cache_read_input_tokens and cache_creation_input_tokens are reported separately",
+    "long_context": "only the short-context columns are listed; stoploss.costs refuses to price a call above 128,000 input tokens instead of guessing a long-context rate"
+  },
+  "usd_per_mtok": {
+    "gpt-5.6-sol":       {"input": 4.00, "cache_read": 0.40, "cache_write": null, "output": 20.00},
+    "gpt-5.6-terra":     {"input": 2.00, "cache_read": 0.20, "cache_write": null, "output": 12.00},
+    "gpt-5.6-luna":      {"input": 0.20, "cache_read": 0.02, "cache_write": null, "output": 1.20},
+    "claude-opus-5":     {"input": 5.00, "cache_read": 0.50, "cache_write": 6.25, "output": 25.00},
+    "claude-opus-4-6":   {"input": 5.00, "cache_read": 0.50, "cache_write": 6.25, "output": 25.00},
+    "claude-sonnet-4-6": {"input": 3.00, "cache_read": 0.30, "cache_write": 3.75, "output": 15.00}
+  }
+}

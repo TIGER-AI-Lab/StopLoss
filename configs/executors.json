@@ -1,0 +1,41 @@
+{
+  "description": "Executors used to collect trajectories (paper App. A, 'Recorded generation and judging configurations'). Stock Harbor Terminus-2 2.0.0 in Harbor 0.17.0; the label is the model alias the agent is given. Spend valves are per-run safety limits enforced by the gateway, set above the cost of a full 100-turn run; they are booked with the gateway's price file and do not affect reported costs.",
+  "executors": {
+    "luna": {
+      "description": "GPT-5.6 Luna: Verified/Pro evaluation runs and most SWE-rebench training runs. Reasoning effort unset (upstream default); output-token caps and sampling parameters are not forwarded.",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "max_turns": 100,
+      "agent_timeout_sec": 7200,
+      "verifier_timeout_sec": 7200,
+      "outer_timeout_sec": 16000,
+      "spend_valve_usd": 9.0,
+      "reasoning_effort": null,
+      "prompt_cache_key": true
+    },
+    "terra": {
+      "description": "GPT-5.6 Terra: part of the SWE-rebench training runs. Same settings as luna.",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "max_turns": 100,
+      "agent_timeout_sec": 7200,
+      "verifier_timeout_sec": 7200,
+      "outer_timeout_sec": 16000,
+      "spend_valve_usd": 22.0,
+      "reasoning_effort": null,
+      "prompt_cache_key": true
+    },
+    "sonnet46t": {
+      "description": "Claude Sonnet 4.6 with extended thinking: Verified/Pro evaluation runs. Thinking budget 8,000 tokens; max_tokens 16,000 when the agent sends none.",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "max_turns": 100,
+      "agent_timeout_sec": 7200,
+      "verifier_timeout_sec": 7200,
+      "outer_timeout_sec": 16000,
+      "spend_valve_usd": 26.0,
+      "thinking_budget_tokens": 8000,
+      "max_output_tokens": 16000
+    }
+  }
+}

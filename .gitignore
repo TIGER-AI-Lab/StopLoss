@@ -1,0 +1,21 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+
+# data, model outputs and results stay out of git
+data/
+runs/
+scores/
+results/
+judges_out/
+*.jsonl
+*.safetensors
+*.bin
+*.pt
+*.log
