@@ -4,13 +4,14 @@
 
 ### Teaching Agents to Predict Failure and Stop Early
 
+Jiarong Liang<sup>✉</sup> · Xueguang Ma · Dongfu Jiang · Yuxuan Zhang · Ping Nie · Wenhu Chen
+
+University of Waterloo
+
 <!-- TODO: replace the X and LinkedIn links below with the announcement posts (also in homepage/index.html). -->
-[![Homepage](https://img.shields.io/badge/Homepage-StopLoss-00897b?logo=googlechrome&logoColor=white)](https://tiger-ai-lab.github.io/StopLoss/)
-[![arXiv](https://img.shields.io/badge/arXiv-2610.25525-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.25525)
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Models%20%26%20Data-ffd21e?logo=huggingface&logoColor=ffd21e)](https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c)
-[![X](https://img.shields.io/badge/X-Post-000000?logo=x&logoColor=white)](https://x.com/TODO)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Post-0a66c2?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik01LjQgNy42YTIuMSAyLjEgMCAxIDEgMC00LjIgMi4xIDIuMSAwIDAgMSAwIDQuMnpNMy42IDloMy42djExLjVIMy42ek05LjQgOWgzLjV2MS42aC4wNWMuNS0uOSAxLjctMS45IDMuNS0xLjkgMy43IDAgNC40IDIuNCA0LjQgNS42djYuMmgtMy42di01LjVjMC0xLjMgMC0zLTEuOC0zcy0yLjEgMS40LTIuMSAyLjl2NS42SDkuNHoiLz48L3N2Zz4K)](https://www.linkedin.com/TODO)
-[![License: MIT](https://img.shields.io/badge/License-MIT-2f80ed)](LICENSE)
+[**🌐 Homepage**](https://tiger-ai-lab.github.io/StopLoss/) | [**📄 Paper**](https://arxiv.org/abs/2610.25525) | [**🤗 Models**](https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c) | [**🤗 Dataset**](https://huggingface.co/datasets/TIGER-Lab/StopLoss-Training-Data) | [**𝕏 X**](https://x.com/TODO) | [**💼 LinkedIn**](https://www.linkedin.com/TODO)
+
+<sub><sup>✉</sup> Corresponding author: Jiarong Liang (jiarongliangcs at gmail.com)</sub>
 
 </div>
 
