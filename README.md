@@ -8,8 +8,7 @@
 
 University of Waterloo
 
-<!-- TODO: replace the X and LinkedIn links below with the announcement posts (also in homepage/index.html). -->
-[**🌐 Homepage**](https://tiger-ai-lab.github.io/StopLoss/) | [**📄 Paper**](https://arxiv.org/abs/2610.25525) | [**🤗 Models**](https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c) | [**🤗 Dataset**](https://huggingface.co/datasets/TIGER-Lab/StopLoss-Training-Data) | [**𝕏 X**](https://x.com/TODO) | [**💼 LinkedIn**](https://www.linkedin.com/TODO)
+[**🌐 Homepage**](https://tiger-ai-lab.github.io/StopLoss/) | [**📄 Paper**](https://arxiv.org/abs/2610.25525) | [**🤗 Models**](https://huggingface.co/collections/TIGER-Lab/stoploss-6ad62c481a266ca21cefb54c) | [**🤗 Dataset**](https://huggingface.co/datasets/TIGER-Lab/StopLoss-Training-Data) | [**𝕏 X**](https://x.com/JLiang51825/status/2112596382959939807) | [**💼 LinkedIn**](https://www.linkedin.com/posts/jiarong-liang-b2a8a5239_aiagents-llm-machinelearning-share-7518364528502571008-LFmN/)
 
 <sub><sup>✉</sup> Corresponding author: Jiarong Liang (jiarongliangcs at gmail.com)</sub>
 
